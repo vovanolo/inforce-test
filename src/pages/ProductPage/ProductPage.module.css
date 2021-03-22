@@ -1,0 +1,21 @@
+.title {
+  text-align: center;
+  color: burlywood;
+}
+.mainImage {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.offset {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

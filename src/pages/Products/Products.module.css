@@ -1,0 +1,19 @@
+.title {
+  text-align: center;
+  color: burlywood;
+}
+
+.offset {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+}
+
+.offsetX {
+  margin-left: 40px;
+  margin-right: 40px;
+}
