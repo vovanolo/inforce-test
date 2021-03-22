@@ -1,6 +1,6 @@
 const urls = {
-  home: "/",
-  products: "/products",
+  home: "/inforce-test/",
+  products: "/inforce-test/products",
 };
 
 export default urls;

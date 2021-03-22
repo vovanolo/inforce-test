@@ -154,41 +154,39 @@ export default function Products() {
         <Button onClick={handleAll} variant="contained" color="primary">
           ALL
         </Button>
-        <PopupState
-          variant="popover"
-          popupId="demo-popup-menu"
-          className={styles.offsetX}
-        >
-          {(popupState) => (
-            <React.Fragment>
-              <Button
-                variant="contained"
-                color="primary"
-                {...bindTrigger(popupState)}
-              >
-                Sort By Name
-              </Button>
-              <Menu {...bindMenu(popupState)}>
-                <MenuItem
-                  onClick={() => {
-                    popupState.close();
-                    handleAscending();
-                  }}
+        <div className={styles.offsetX}>
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <React.Fragment>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  {...bindTrigger(popupState)}
                 >
-                  Acending
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    popupState.close();
-                    handleDescending();
-                  }}
-                >
-                  Descending
-                </MenuItem>
-              </Menu>
-            </React.Fragment>
-          )}
-        </PopupState>
+                  Sort By Name
+                </Button>
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem
+                    onClick={() => {
+                      popupState.close();
+                      handleAscending();
+                    }}
+                  >
+                    Acending
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      popupState.close();
+                      handleDescending();
+                    }}
+                  >
+                    Descending
+                  </MenuItem>
+                </Menu>
+              </React.Fragment>
+            )}
+          </PopupState>
+        </div>
         <PopupState variant="popover" popupId="demo-popup-menu">
           {(popupState) => (
             <React.Fragment>

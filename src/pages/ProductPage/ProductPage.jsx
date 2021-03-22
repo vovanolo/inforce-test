@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
   },
   comment: {
     ...theme.typography.button,
-    // backgroundColor: theme.text.secondary,
     padding: theme.spacing(1),
   },
   heading: {
@@ -143,15 +142,12 @@ export default function ProductPage() {
             </AccordionSummary>
             <AccordionDetails>
               {productInfo.size && (
-                <>
-                  <Typography>widht: {productInfo.size.width}</Typography>
-                  <br />
-                  <Typography ml={2}>
-                    height: {productInfo.size.height}
-                  </Typography>
-                </>
+                <div>
+                  <h2>widht: {productInfo.size.width}</h2>
+                  <h2 ml={2}>height: {productInfo.size.height}</h2>
+                  <h2>weight: {productInfo.weight}</h2>
+                </div>
               )}
-              <Typography>weight: {productInfo.weight}</Typography>
             </AccordionDetails>
           </Accordion>
           <h2 className={styles.title}>Comments</h2>
