@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/inforce-test/static/css/main.29d4b7fb.chunk.css",
-    "main.js": "/inforce-test/static/js/main.ba724f72.chunk.js",
-    "main.js.map": "/inforce-test/static/js/main.ba724f72.chunk.js.map",
+    "main.css": "/inforce-test/static/css/main.cff0c5e4.chunk.css",
+    "main.js": "/inforce-test/static/js/main.a1e55ab4.chunk.js",
+    "main.js.map": "/inforce-test/static/js/main.a1e55ab4.chunk.js.map",
     "runtime-main.js": "/inforce-test/static/js/runtime-main.a2cce893.js",
     "runtime-main.js.map": "/inforce-test/static/js/runtime-main.a2cce893.js.map",
     "static/js/2.fd22cdad.chunk.js": "/inforce-test/static/js/2.fd22cdad.chunk.js",
     "static/js/2.fd22cdad.chunk.js.map": "/inforce-test/static/js/2.fd22cdad.chunk.js.map",
     "index.html": "/inforce-test/index.html",
-    "static/css/main.29d4b7fb.chunk.css.map": "/inforce-test/static/css/main.29d4b7fb.chunk.css.map",
+    "static/css/main.cff0c5e4.chunk.css.map": "/inforce-test/static/css/main.cff0c5e4.chunk.css.map",
     "static/js/2.fd22cdad.chunk.js.LICENSE.txt": "/inforce-test/static/js/2.fd22cdad.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.a2cce893.js",
     "static/js/2.fd22cdad.chunk.js",
-    "static/css/main.29d4b7fb.chunk.css",
-    "static/js/main.ba724f72.chunk.js"
+    "static/css/main.cff0c5e4.chunk.css",
+    "static/js/main.a1e55ab4.chunk.js"
   ]
 }
