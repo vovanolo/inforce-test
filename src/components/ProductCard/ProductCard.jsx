@@ -19,7 +19,14 @@ const useStyles = makeStyles({
   },
 });
 
-export default function ProductCard({ id, name, imageUrl, count, handleOpen }) {
+export default function ProductCard({
+  id,
+  name,
+  imageUrl,
+  count,
+  handleOpen,
+  description,
+}) {
   const classes = useStyles();
   return (
     <Card className={classes.root} style={{ margin: "0 auto" }}>
@@ -35,8 +42,7 @@ export default function ProductCard({ id, name, imageUrl, count, handleOpen }) {
               {name}
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
+              {description}
             </Typography>
           </CardContent>
           <CardContent>Product Count: {count}</CardContent>

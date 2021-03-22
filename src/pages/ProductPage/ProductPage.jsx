@@ -21,6 +21,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
+import EditForm from "../../components/EditForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,9 +40,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function ProductPage() {
   const classes = useStyles();
-  const [productInfo, setProductInfo] = useState([]);
+  const [productInfo, setProductInfo] = useState(null);
   const [comment, setComment] = useState("");
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState("");
+  const [allComments, setAllComments] = useState([]);
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [count, setCount] = useState(0);
@@ -50,12 +53,17 @@ export default function ProductPage() {
   const [weight, setWeight] = useState("");
 
   const { id } = useParams();
-  useEffect(async () => {
-    const result = await axios(
-      `https://inforce-test-app.herokuapp.com/products/${id}`
-    );
-    setProductInfo(result.data);
-    console.log(result.data);
+  useEffect(() => {
+    (async () => {
+      const result = await axios(
+        `https://inforce-test-app.herokuapp.com/products/${id}`
+      );
+      setProductInfo(result.data);
+      setName(result.data.name);
+      setImage(result.data.imageUrl);
+      setCount(result.data.count);
+      setAllComments(result.data.comments);
+    })();
   }, [id]);
 
   const handleComment = () => {
@@ -68,31 +76,35 @@ export default function ProductPage() {
       .then((res) => {
         console.log(res);
         console.log(res.data);
+        setAllComments((state) => [...state, res.data]);
       });
   };
-  const handleSubmit = (e) => {
-    // let size = {
-    //   widht,
-    //   height,
-    // };
-    e.preventDefault();
-    console.log(name);
-    // // console.log(JSON.stringify({ name, image, count, size, weight }));
-    // axios
-    //   .post(`https://inforce-test-app.herokuapp.com/products`, {
-    //     name: name,
-    //     imageUrl: image,
-    //     count: count,
-    //     size: {
-    //       width: Number(width),
-    //       height: Number(height),
-    //     },
-    //     weight: weight,
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //     console.log(res.data);
-    //   });
+  const handleSubmit = (data) => {
+    const finalData = {
+      name: data.name,
+      imageUrl: data.imageUrl,
+      count: data.count,
+      size: {
+        width: data.width,
+        height: data.height,
+      },
+      weight: data.weight,
+      description: data.description,
+    };
+    handleClose();
+    axios
+      .put(`https://inforce-test-app.herokuapp.com/products/${id}`, finalData)
+      .then((res) => {
+        setProductInfo(res.data);
+      });
+  };
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`https://inforce-test-app.herokuapp.com/comments/${id}`)
+      .then((response) => {
+        setAllComments((state) => state.filter((comment) => comment.id !== id));
+      });
   };
 
   const openEditModal = () => {
@@ -105,149 +117,105 @@ export default function ProductPage() {
 
   return (
     <div>
-      <div className={styles.centered}>
-        <Button
-          onClick={openEditModal}
-          variant="contained"
-          color="default"
-          className={classes.button}
-          startIcon={<EditIcon />}
-        >
-          Edit Product
-        </Button>
-      </div>
-      <img className={styles.mainImage} src={productInfo.imageUrl} alt="" />
-      <h1 className={styles.title}>{productInfo.name}</h1>
-      <Accordion className={classes.root}>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography className={classes.heading}>Details</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {productInfo.size && (
-            <>
-              <Typography>widht: {productInfo.size.width}</Typography>
-              <br />
-              <Typography ml={2}>height: {productInfo.size.height}</Typography>
-            </>
-          )}
-          <Typography>weight: {productInfo.weight}</Typography>
-        </AccordionDetails>
-      </Accordion>
-      <h2 className={styles.title}>Comments</h2>
-      <div className={styles.centered}>
-        <FormControl fullWidth className={classes.root} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-amount">Comment</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-amount"
-            value={comment}
-            labelWidth={60}
-            onChange={(e) => setComment(e.target.value)}
-          />
-        </FormControl>
-      </div>
-      <div className={styles.centered}>
-        <Button onClick={handleComment} variant="contained">
-          Add Comment
-        </Button>
-      </div>
-      {productInfo.comments &&
-        productInfo.comments.map((comment) => (
-          <div className={styles.offset} key={comment.id}>
-            <Box className={classes.root} p={3} my={3} bgcolor="text.secondary">
-              {comment.description}
-            </Box>
+      {productInfo && (
+        <>
+          <div className={styles.centered}>
+            <Button
+              onClick={openEditModal}
+              variant="contained"
+              color="default"
+              className={classes.button}
+              startIcon={<EditIcon />}
+            >
+              Edit Product
+            </Button>
           </div>
-        ))}
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Add new Product</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Fill in the form to add new product
-          </DialogContentText>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              autoFocus
-              margin="dense"
-              value={productInfo.name}
-              id="name"
-              label="Name of Product"
-              type="name"
-              fullWidth
-              onChange={(e) => setName(e.target.value)}
-            />
-            <TextField
-              autoFocus
-              margin="dense"
-              value={productInfo.imageUrl}
-              id="image"
-              label="imageUrl"
-              type="text"
-              fullWidth
-              onChange={(e) => setImage(e.target.value)}
-            />
-            <TextField
-              autoFocus
-              margin="dense"
-              id="count"
-              value={productInfo.count}
-              label="Count of Product"
-              type="number"
-              fullWidth
-              onChange={(e) => setCount(e.target.value)}
-            />
-            <Grid container>
-              <Box>
-                {/* <TextField
-                  autoFocus
-                  margin="dense"
-                  value={productInfo.size.width}
-                  id="width"
-                  label="Width"
-                  type="number"
-                  onChange={(e) => setWidth(e.target.value)}
-                /> */}
-              </Box>
-              <Box ml={2}>
-                {/* <TextField
-                  autoFocus
-                  margin="dense"
-                  value={productInfo.size.height}
-                  id="height"
-                  label="Height"
-                  type="number"
-                  onChange={(e) => setHeight(e.target.value)}
-                /> */}
-              </Box>
-            </Grid>
-            <TextField
-              autoFocus
-              margin="dense"
-              value={productInfo.weight}
-              id="weight"
-              label="Weight"
-              type="text"
-              fullWidth
-              onChange={(e) => setWeight(e.target.value)}
-            />
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button type="submit" onClick={handleClose} color="primary">
-                Add
-              </Button>
-            </DialogActions>
-          </form>
-        </DialogContent>
-      </Dialog>
+          <img className={styles.mainImage} src={productInfo.imageUrl} alt="" />
+          <h1 className={styles.title}>{productInfo.name}</h1>
+          <h2 className={styles.subtitle}>{productInfo.description}</h2>
+          <Accordion className={classes.root}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography className={classes.heading}>Details</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {productInfo.size && (
+                <>
+                  <Typography>widht: {productInfo.size.width}</Typography>
+                  <br />
+                  <Typography ml={2}>
+                    height: {productInfo.size.height}
+                  </Typography>
+                </>
+              )}
+              <Typography>weight: {productInfo.weight}</Typography>
+            </AccordionDetails>
+          </Accordion>
+          <h2 className={styles.title}>Comments</h2>
+          <div className={styles.centered}>
+            <FormControl fullWidth className={classes.root} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-amount">
+                Comment
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-amount"
+                value={comment}
+                labelWidth={60}
+                error={!!error}
+                onChange={(e) => setComment(e.target.value)}
+              />
+            </FormControl>
+          </div>
+          <div className={styles.centered}>
+            <Button onClick={handleComment} variant="contained">
+              Add Comment
+            </Button>
+          </div>
+          {allComments &&
+            allComments.reverse().map((comment) => (
+              <div className={styles.offset} key={comment.id}>
+                <Box
+                  className={classes.root}
+                  p={3}
+                  my={3}
+                  bgcolor="text.secondary"
+                >
+                  {comment.description}
+                </Box>
+                <div className={styles.centered}>
+                  <Button
+                    onClick={() => handleDelete(comment.id)}
+                    variant="contained"
+                    color="secondary"
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </div>
+            ))}
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="form-dialog-title"
+          >
+            <DialogTitle id="form-dialog-title">Add new Product</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Fill in the form to add new product
+              </DialogContentText>
+
+              <EditForm
+                onSubmit={handleSubmit}
+                modalClose={handleClose}
+                id={productInfo.id}
+              />
+            </DialogContent>
+          </Dialog>
+        </>
+      )}
     </div>
   );
 }
